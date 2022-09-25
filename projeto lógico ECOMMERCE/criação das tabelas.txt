@@ -1,0 +1,121 @@
+CREATE TABLE Cliente (
+  IdCliente INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  Cliente_Fisico_idCliente_Fisico INTEGER UNSIGNED NOT NULL,
+  Cliente_Juridico_idCliente_Juridico INTEGER UNSIGNED NOT NULL,
+  Pagamento_idPagamento INTEGER UNSIGNED NOT NULL,
+  endereço VARCHAR(90) NOT NULL,
+  PRIMARY KEY(IdCliente, Cliente_Fisico_idCliente_Fisico, Cliente_Juridico_idCliente_Juridico, Pagamento_idPagamento),
+  INDEX Cliente_FKIndex1(Cliente_Fisico_idCliente_Fisico),
+  INDEX Cliente_FKIndex2(Cliente_Juridico_idCliente_Juridico),
+  INDEX Cliente_FKIndex3(Pagamento_idPagamento)
+);
+
+CREATE TABLE Cliente_Fisico (
+  idCliente_Fisico INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  cpf VARCHAR(15) NOT NULL,
+  nome VARCHAR(100) NOT NULL,
+  PRIMARY KEY(idCliente_Fisico)
+);
+
+CREATE TABLE Cliente_Juridico (
+  idCliente_Juridico INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  razão_social VARCHAR(100) NOT NULL,
+  PRIMARY KEY(idCliente_Juridico)
+);
+
+CREATE TABLE Disponibilizando_produto (
+  Produto_idProduto INTEGER UNSIGNED NOT NULL,
+  Fornecedor_idFornecedor INTEGER UNSIGNED NOT NULL,
+  PRIMARY KEY(Produto_idProduto, Fornecedor_idFornecedor),
+  INDEX Produto_has_Fornecedor_FKIndex1(Produto_idProduto),
+  INDEX Produto_has_Fornecedor_FKIndex2(Fornecedor_idFornecedor)
+);
+
+CREATE TABLE Entrega (
+  idEntrega INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  status_2 VARCHAR(45) NOT NULL,
+  código_entrega INTEGER UNSIGNED NOT NULL,
+  PRIMARY KEY(idEntrega)
+);
+
+CREATE TABLE Estoque (
+  idEstoque INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  localização VARCHAR(200) NOT NULL,
+  PRIMARY KEY(idEstoque)
+);
+
+CREATE TABLE Fornecedor (
+  idFornecedor INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  razão_social VARCHAR(255) NOT NULL,
+  cnpj VARCHAR(45) NOT NULL,
+  PRIMARY KEY(idFornecedor)
+);
+
+CREATE TABLE Pagamento (
+  idPagamento INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  valor DOUBLE NOT NULL,
+  forma VARCHAR(45) NOT NULL,
+  PRIMARY KEY(idPagamento)
+);
+
+CREATE TABLE Pedido (
+  idPedido INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  Cliente_IdCliente INTEGER UNSIGNED NOT NULL,
+  Cliente_Fisico_idCliente_Fisico INTEGER UNSIGNED NOT NULL,
+  Cliente_Juridico_idCliente_Juridico INTEGER UNSIGNED NOT NULL,
+  Cliente_Pagamento_idPagamento INTEGER UNSIGNED NOT NULL,
+  Entrega_idEntrega INTEGER UNSIGNED NOT NULL,
+  status_pedido VARCHAR(100) NOT NULL,
+  descrição VARCHAR(255) NOT NULL,
+  frete FLOAT NULL,
+  PRIMARY KEY(idPedido, Cliente_IdCliente, Cliente_Fisico_idCliente_Fisico, Cliente_Juridico_idCliente_Juridico, Cliente_Pagamento_idPagamento, Entrega_idEntrega),
+  INDEX Pedido_FKIndex1(Cliente_IdCliente, Cliente_Fisico_idCliente_Fisico, Cliente_Juridico_idCliente_Juridico, Cliente_Pagamento_idPagamento),
+  INDEX Pedido_FKIndex2(Entrega_idEntrega)
+);
+
+CREATE TABLE Produto (
+  idProduto INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  categoria VARCHAR(45) NOT NULL,
+  descrição VARCHAR(255) NOT NULL,
+  valor VARCHAR(45) NOT NULL,
+  PRIMARY KEY(idProduto)
+);
+
+CREATE TABLE Produto_Estoque (
+  Produto_idProduto INTEGER UNSIGNED NOT NULL,
+  Estoque_idEstoque INTEGER UNSIGNED NOT NULL,
+  quantidade INTEGER UNSIGNED NOT NULL,
+  PRIMARY KEY(Produto_idProduto, Estoque_idEstoque),
+  INDEX Produto_has_Estoque_FKIndex1(Produto_idProduto),
+  INDEX Produto_has_Estoque_FKIndex2(Estoque_idEstoque)
+);
+
+CREATE TABLE Produto_Pedido (
+  Produto_idProduto INTEGER UNSIGNED NOT NULL,
+  Pedido_Cliente_IdCliente INTEGER UNSIGNED NOT NULL,
+  Pedido_idPedido INTEGER UNSIGNED NOT NULL,
+  Pedido_Cliente_Fisico_idCliente_Fisico INTEGER UNSIGNED NOT NULL,
+  Pedido_Cliente_Juridico_idCliente_Juridico INTEGER UNSIGNED NOT NULL,
+  Pedido_Cliente_Pagamento_idPagamento INTEGER UNSIGNED NOT NULL,
+  Pedido_Entrega_idEntrega INTEGER UNSIGNED NOT NULL,
+  quantidade VARCHAR(45) NOT NULL,
+  PRIMARY KEY(Produto_idProduto, Pedido_Cliente_IdCliente, Pedido_idPedido, Pedido_Cliente_Fisico_idCliente_Fisico, Pedido_Cliente_Juridico_idCliente_Juridico, Pedido_Cliente_Pagamento_idPagamento, Pedido_Entrega_idEntrega),
+  INDEX Produto_has_Pedido_FKIndex1(Produto_idProduto),
+  INDEX Produto_has_Pedido_FKIndex2(Pedido_idPedido, Pedido_Cliente_IdCliente, Pedido_Cliente_Fisico_idCliente_Fisico, Pedido_Cliente_Juridico_idCliente_Juridico, Pedido_Cliente_Pagamento_idPagamento, Pedido_Entrega_idEntrega)
+);
+
+CREATE TABLE Produto_vendedor (
+  Terceiro_vendedor_idTerceiro_vendedor INTEGER UNSIGNED NOT NULL,
+  Produto_idProduto INTEGER UNSIGNED NOT NULL,
+  PRIMARY KEY(Terceiro_vendedor_idTerceiro_vendedor, Produto_idProduto),
+  INDEX Terceiro_vendedor_has_Produto_FKIndex1(Terceiro_vendedor_idTerceiro_vendedor),
+  INDEX Terceiro_vendedor_has_Produto_FKIndex2(Produto_idProduto)
+);
+
+CREATE TABLE Terceiro_vendedor (
+  idTerceiro_vendedor INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  razão_social VARCHAR(45) NOT NULL,
+  localização VARCHAR(255) NOT NULL,
+  PRIMARY KEY(idTerceiro_vendedor)
+);
+

@@ -1,0 +1,147 @@
+INSERT INTO fornecedor VALUES (null,'Super atacado','11.111 111/0001-11'),
+			      (null,'Martins atacado','22.222.222/0001-22'),
+			      (null,'Top atacado','33.333.333/0001-33'),
+                              (null,'Super atacado','44.444.444/0001-44'),
+                              (null,'Maxxi atacado','55.555.555/0001-55');
+
+INSERT INTO estoque VALUES (null,'setor01'),
+                           (null,'setor02'),
+                           (null,'setor03'),
+                           (null,'setor04'),
+                           (null,'setor05');
+
+INSERT INTO entrega VALUES (null,'coleta',1111),
+			   (null,'roteirização',2222),
+                           (null,'transporte',3333),
+                           (null,'distribuição',4444),
+                           (null,'entrega',5555);
+
+INSERT INTO pagamento VALUES (null,50,'pix'),
+			     (null,100,'pix'),
+                             (null,150,'cartão de crédito'),
+                             (null,200,'boleto bancário'),
+                             (null,250,'cartão de crédito');
+
+INSERT INTO cliente_juridico VALUES (null,'abc.ltda'),
+				    (null,'gas.ltda'),
+                                    (null,'circulo.ltda'),
+                                    (null,'quadrado.ltda'),
+                                    (null,'xyz.ltda');
+
+INSERT INTO cliente_fisico VALUES (null,'334.478.140-55','Maria'),
+				  (null,'388.311.500-22','Carlos'),
+                                  (null,'110.054.650-29','Gabriela'),
+                                  (null,'743.333.950-70','Aparecida'),
+                                  (null,'727.864.520-40','Lucas');
+
+INSERT INTO terceiro_vendedor VALUES (null,'Flávia e Sandra Contábil.ltda','rua do parque,100-Campo Belo-São Paulo'),
+				     (null,'Martin e Sueli Telecom.ltda','Rua Adão Franco de Toledo,500-Jardim Europa-Lençóis Paulista'),
+                                     (null,'Allana e Ian Restaurante.ltda','Rua Afonso Pasqualim,123-centro-São José dos Pinhais'),
+                                     (null,'Luiza Entulhos.ltda','Travessa Quatro,875-Porto-Pelotas'),
+                                     (null,'Vera Telas.ltda','Travessa Jorge José Braz,200-Campeche-Florianópolis');
+
+
+
+INSERT INTO produto VALUES (null,'informatica','impressora','600'),
+			   (null,'informatica','teclado','120'),
+                           (null,'informatica','projetor','1300'),
+                           (null,'informatica','roteador','180'),
+                           (null,'informatica','fone com microfone','80');
+
+
+INSERT INTO cliente VALUES (null,1,1,1,'Rua Montes Claros,250-Boa Vista-Joinville'),
+                           (null,2,2,2,'Rua João Lopes Pereira,112-Alpino-São Bento do Sul'),
+                           (null,3,3,3,'Avenida Ibicui,78-Ibirapuitã-Alegrete'),
+                           (null,4,4,4,'Estrada Capoeiras,789-Cascata-Porto Alegre'),
+                           (null,5,5,5,'Rua das Hortênsias,166-Cascata-Serra');
+
+
+INSERT INTO produto_estoque VALUES (1,1,10),
+				   (2,2,20),
+				   (3,3,30),
+				   (4,4,40),
+                                   (5,5,50);
+
+
+INSERT INTO disponibilizando_produto VALUES (1,1),
+                                            (2,2),
+                                            (3,3),
+                                            (4,4),
+                                            (5,5);
+
+INSERT INTO produto_vendedor VALUES (1,1),
+                                    (2,2),
+                                    (3,3),
+                                    (4,4),
+                                    (5,5);
+
+
+INSERT INTO pedido VALUES (null,1,1,1,1,1,'pagamento confirmado','descrição 01',20),
+			  (null,2,2,2,2,2,'pedido separado','descrição 02',40),
+                          (null,3,3,3,3,3,'transportadora','descrição 03',15),
+                          (null,4,4,4,4,4,'pagamento confirmado','descrição 04',36),
+                          (null,5,5,5,5,5,'pedido separado','descrição 05',58);
+
+INSERT INTO produto_pedido VALUES (1,1,1,1,1,1,1,4),
+		                  (2,2,2,2,2,2,2,9),
+                                  (3,3,3,3,3,3,3,8),
+                                  (4,4,4,4,4,4,4,13),
+                                  (5,5,5,5,5,5,5,3);
+
+
+
+
+
+1) Mostrar os dados dos pedidos que tenham no status do pedido o valor de pagamneto confirmado:
+
+	select *
+	from pedido Ped,
+	     cliente C,
+	     cliente_fisico CF,
+	     cliente_juridico CJ,
+	     pagamento Pag,
+	     entrega E
+	where Ped.Cliente_IdCliente=C.IdCliente and
+	      Ped.Cliente_Fisico_idCliente_Fisico=CF.idCliente_Fisico and
+	      Ped.Cliente_Juridico_idCliente_Juridico=CJ.idCliente_Juridico and
+	      Ped.Cliente_Pagamento_idPagamento=Pag.idPagamento and
+	      Ped.Entrega_idEntrega=E.idEntrega and 
+	      Ped.status_pedido = 'pagamento confirmado';
+
+2) Listar a descrição de produtos de uma ordenação crescente:
+
+	select descrição
+	from produto
+	order by descrição asc;
+
+3) Mostrar a quantidade total de produtos estocados:
+
+	select sum(PE.quantidade) as total_produtos_estoque
+	from produto_estoque PE
+
+4) Qual(ais) fornecedor(es) se localizão em Pelotas:
+
+	select razão_social as fornecedor
+	from terceiro_vendedor
+	where localização like'%Pelotas%';
+
+5) Criada uma promoção de colocar um desconto de dez porcento sobre o valor de frete:
+
+	select Ped.frete-Ped.frete*0.1 as desconto
+	from pedido Ped,
+	     cliente C,
+	     cliente_fisico CF,
+	     cliente_juridico CJ,
+	     pagamento Pag,
+	     entrega E
+	where Ped.Cliente_IdCliente=C.IdCliente and
+	      Ped.Cliente_Fisico_idCliente_Fisico=CF.idCliente_Fisico and
+	      Ped.Cliente_Juridico_idCliente_Juridico=CJ.idCliente_Juridico and
+	      Ped.Cliente_Pagamento_idPagamento=Pag.idPagamento and
+	      Ped.Entrega_idEntrega=E.idEntrega
+
+
+
+
+
+
