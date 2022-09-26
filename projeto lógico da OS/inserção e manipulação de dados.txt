@@ -1,0 +1,105 @@
+
+INSERT INTO cliente VALUES (1,'Benjamin Luís Figueiredo','97251268852','benjaminluisfigueiredo@gmail.com.br','(51)98840-5281'),
+			   (2,'Carlos Márcio Melo','3149945550-2','carlos-melo93@gmail.com.br','(62)99822-4732'),
+                           (3,'Bento Bryan Lorenzo Viana','92333349170','bento.bryan.viana@hotmail.com.br','(51)99532-6743'),
+                           (4,'Thiago Thales Freitas','40447537451','thiago.thales.freitas@hotmail.com.br','(62)98377-9425'),
+                           (5,'Heloise Rita Pereira','92269608897','heloise_rita_pereira@gmail.com.br','(47)98959-0066');
+
+INSERT INTO veiculo VALUES (null,'Renault','Logan','preto','2015-06-14','MUY-0624'),
+			   (null,'Volkswagen','Saveiro','prata','2020-08-02','NFA-4610'),
+                           (null,'Volkswagen','Gol','cinza','2016-09-12','MWB-4272'),
+                           (null,'Renault','Sandero','branco','2019-10-26','IAL-7265'),
+                           (null,'Ford','Fiesta','preto','2010-03-18','JLU-9682');
+
+INSERT INTO mecanicos VALUES (null,1,'Raul André Cardoso','Rua Esmeraldino Figueiredo,454-centro-Porto Alegre','mecânica preventiva e corretiva'),
+			     (null,2,'Daniel Pedro Barbosa','Beco Andor Maciel,679-São Jorge-Porto Alegre','borracheiro'),
+                             (null,3,'Ruan Anderson dos Santos','Rua H-2,939-Mecejana-Porto Alegre','amortecedores '),
+                             (null,4,'Ryan Leandro Fernandes','Rua Campinas,683-Glória-Porto alegre','eletricista'),
+                             (null,5,'Gustavo Samuel Severino Assunção','Rua da Praia,89-Centro-Porto Alegre','freios');
+
+INSERT INTO cliente_has_veiculo VALUES (1,1),
+                                       (2,2),
+                                       (3,3),
+                                       (4,4),
+                                       (5,5);
+
+
+INSERT INTO referência_mão_obra VALUES (null,'alinhamento e balanceamento',500),
+                                       (null,'manutenção de embreagem',800),
+                                       (null,'troca de óleo',250),
+                                       (null,'troca componentes de freio',360),
+                                       (null,'Geometria e balanceamento',480);
+
+
+INSERT INTO ordem_serviço VALUES (null,1,1,1,1,'2022-05-26',300,'aprovado','2022-05-30',50,'sim'),
+                                 (null,2,2,2,2,'2022-08-15',350,'em definição','2022-08-18',60,'aguardo'),
+                                 (null,3,3,3,3,'2022-07-21',480,'aprovado','2022-07-26',35,'sim'),
+                                 (null,4,4,4,4,'2022-08-02',900,'aprovado','2022-08-10',110,'sim'),
+                                 (null,5,5,5,5,'2022-08-03',370,'em definição','2022-08-05',200,'aguardo');
+
+1) Mostrar todas ordens de serviço que foram aprovadas
+	
+	SELECT * 
+	FROM ordem_serviço OS,
+     	     cliente C,
+     	     referência_mão_obra RMO,
+     	     mecanicos M
+	WHERE OS.Cliente_idCliente=C.idCliente and
+      	      OS.Referência_mão_obra_idReferência_mão_obra=RMO.idReferência_mão_obra and 
+              OS.Mecanicos_idMecanicos=M.idMecanicos and 
+	      OS.status_2 LIKE 'aprovado';
+
+
+2) Mostrar os tipos de mão de obra que tenham o valor maior que R$ 400,00
+	
+	SELECT tipo_serviço 
+	FROM referência_mão_obra
+	WHERE valor_serviço>400;
+
+3) Mostrar todos nomes dos mecãnicos que moram no centro de Porto Alegre
+
+	SELECT nome 
+	FROM mecanicos 
+	WHERE endereço like '%centro%'; 
+
+4) Mostrar o veículo do Carlos Márcio Melo
+	
+	SELECT V.marca,V.modelo 
+	FROM cliente_has_veiculo CV,
+	     cliente C,
+             veiculo V
+	where CV.Cliente_idCliente=C.idCliente and 
+              CV.Veiculo_idVeiculo=V.idVeiculo and 
+	      C.nome = 'Carlos Márcio Melo';
+	
+5) Ordenar a ordem de serviço pela data de conclusão
+
+	SELECT * 
+	FROM ordem_serviço 
+	order by data_conclusão asc;
+
+6) Mostrar quantas ordens de serviço tem
+
+	SELECT COUNT(*) 
+	FROM ordem_serviço;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

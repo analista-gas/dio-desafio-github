@@ -1,0 +1,63 @@
+
+CREATE TABLE Cliente (
+  idCliente INTEGER UNSIGNED NOT NULL,
+  nome VARCHAR(100) NOT NULL,
+  cnh VARCHAR(20) NOT NULL,
+  email VARCHAR(100) NOT NULL,
+  telefone VARCHAR(20) NOT NULL,
+  PRIMARY KEY(idCliente)
+);
+
+CREATE TABLE Cliente_has_Veiculo (
+  Cliente_idCliente INTEGER UNSIGNED NOT NULL,
+  Veiculo_idVeiculo INTEGER UNSIGNED NOT NULL,
+  PRIMARY KEY(Cliente_idCliente, Veiculo_idVeiculo),
+  INDEX Cliente_has_Veiculo_FKIndex1(Cliente_idCliente),
+  INDEX Cliente_has_Veiculo_FKIndex2(Veiculo_idVeiculo)
+);
+
+CREATE TABLE Mecanicos (
+  idMecanicos INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  Veiculo_idVeiculo INTEGER UNSIGNED NOT NULL,
+  nome VARCHAR(100) NOT NULL,
+  endereço VARCHAR(255) NOT NULL,
+  especialidade VARCHAR(255) NOT NULL,
+  PRIMARY KEY(idMecanicos, Veiculo_idVeiculo),
+  INDEX Mecanicos_FKIndex1(Veiculo_idVeiculo)
+);
+
+CREATE TABLE Ordem_serviço (
+  idOrdem_serviço INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  Cliente_idCliente INTEGER UNSIGNED NOT NULL,
+  Referência_mão_obra_idReferência_mão_obra INTEGER UNSIGNED NOT NULL,
+  Mecanicos_Veiculo_idVeiculo INTEGER UNSIGNED NOT NULL,
+  Mecanicos_idMecanicos INTEGER UNSIGNED NOT NULL,
+  data_emissão DATE NOT NULL,
+  valor DOUBLE NOT NULL,
+  status_2 VARCHAR(255) NOT NULL,
+  data_conclusão DATE NOT NULL,
+  valor_cada_peça DOUBLE NOT NULL,
+  aceito_cliente VARCHAR(10) NULL,
+  PRIMARY KEY(idOrdem_serviço, Cliente_idCliente),
+  INDEX Ordem_serviço_FKIndex1(Mecanicos_idMecanicos, Mecanicos_Veiculo_idVeiculo),
+  INDEX Ordem_serviço_FKIndex2(Referência_mão_obra_idReferência_mão_obra),
+  INDEX Ordem_serviço_FKIndex3(Cliente_idCliente)
+);
+
+CREATE TABLE Referência_mão_obra (
+  idReferência_mão_obra INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  tipo_serviço VARCHAR(45) NOT NULL,
+  valor_serviço DOUBLE NOT NULL,
+  PRIMARY KEY(idReferência_mão_obra)
+);
+
+CREATE TABLE Veiculo (
+  idVeiculo INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  marca VARCHAR(255) NOT NULL,
+  modelo VARCHAR(255) NOT NULL,
+  cor VARCHAR(45) NOT NULL,
+  ano DATE NOT NULL,
+  placa VARCHAR(20) NOT NULL,
+  PRIMARY KEY(idVeiculo)
+);
+
